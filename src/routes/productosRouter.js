@@ -1,19 +1,19 @@
 const { Router } = require('express')
 const router = Router()
-
 const productosJSON = require('../json/productos.json')
 const fs = require('fs')
 const path = require('path')
 let ruta = path.join(__dirname, '..', 'json', 'productos.json')
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+
 
 function saveProducts(productos) {
     fs.writeFileSync(ruta, JSON.stringify(productos, null, 5))
 }
 
-router.get('/api/productos', (req, res) => {
+
+
+router.get('/', (req, res) => {
     let resultado = productosJSON
 
     if (req.query.limit) {
@@ -24,7 +24,7 @@ router.get('/api/productos', (req, res) => {
     res.status(200).json({ filtros: req.query, resultado });
 });
 
-router.get('/api/productos/:id', (req, res) => {
+router.get('/:id', (req, res) => {
 
     let id = req.params.id
     // console.log(id, 2)
@@ -43,7 +43,7 @@ router.get('/api/productos/:id', (req, res) => {
 
 // POST
 
-router.post('/api/productos', (req, res) => {
+router.post('/', (req, res) => {
     let { title, description, price, code, stock } = req.body
     let thumbnails = req.body.thumbnails || [];
 
@@ -78,7 +78,7 @@ router.post('/api/productos', (req, res) => {
 
 // UPDATE
 
-router.put('/api/productos/:id', (req, res) => {
+router.put('/:id', (req, res) => {
 
     let { id } = req.params
     id = parseInt(id)
@@ -124,7 +124,7 @@ router.put('/api/productos/:id', (req, res) => {
 
 // DELETE 
 
-router.delete('/api/productos/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
 
     let { id } = req.params
     id = parseInt(id)
