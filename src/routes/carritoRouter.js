@@ -40,7 +40,7 @@ routerC.get('/:cid', (req, res) => {
     res.status(200).json({ resultado });
 })
 
-// POST CARRITO con id y array de productos vacio SIN timestamp
+// POST CARRITO con id y array de productos vacio
 
 routerC.post('/', (req, res) => {
     let carritos = carritosJSON;
@@ -64,7 +64,7 @@ routerC.post('/', (req, res) => {
 
 })
 
-//  el POST /:cid/productos/:pid debe agregar un produto al array carrito que tenga la id del producto agregado y la cantidad de veces que ese producto esta en el carrito ("quantity")
+//  POST CARRITO con id y array de productos con un producto
 
 routerC.post('/:cid/productos/:pid', (req, res) => {
 
