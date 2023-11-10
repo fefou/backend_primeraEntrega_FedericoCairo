@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const router = Router()
+const routerP = Router()
 const productosJSON = require('../json/productos.json')
 const fs = require('fs')
 const path = require('path')
@@ -13,7 +13,7 @@ function saveProducts(productos) {
 
 
 
-router.get('/', (req, res) => {
+routerP.get('/', (req, res) => {
     let resultado = productosJSON
 
     if (req.query.limit) {
@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
     res.status(200).json({ filtros: req.query, resultado });
 });
 
-router.get('/:id', (req, res) => {
+routerP.get('/:id', (req, res) => {
 
     let id = req.params.id
     // console.log(id, 2)
@@ -43,42 +43,43 @@ router.get('/:id', (req, res) => {
 
 // POST
 
-router.post('/', (req, res) => {
-    let { title, description, price, code, stock } = req.body
+routerP.post('/', (req, res) => {
+    let { title, description, price, code, stock, category } = req.body;
     let thumbnails = req.body.thumbnails || [];
+    let status = req.body.status !== undefined ? req.body.status : true;
 
-    if (!title || !price || !code || !stock) {
+    if (!title || !price || !code || !stock || !category) {
         res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: `Title, price, code y stock son datos obligatorios.` })
+        return res.status(400).json({ error: `Title, price, code y stock son datos obligatorios.` });
     }
 
-    let productos = productosJSON
-    let existe = productos.find(producto => producto.title === title || producto.code === code)
+    let productos = productosJSON;
+    let existe = productos.find(producto => producto.title === title || producto.code === code);
     if (existe) {
         res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: `El titulo ${title} o codigo ${code} ya existe en BD` })
+        return res.status(400).json({ error: `El titulo ${title} o codigo ${code} ya existe en BD` });
     }
 
-    let id = 1
+    let id = 1;
     if (productos.length > 0) {
-        id = productos[productos.length - 1].id + 1
+        id = productos[productos.length - 1].id + 1;
     }
 
     let nuevoProducto = {
-        id, title, description, price, code, stock, thumbnails
-    }
+        id, title, description, price, code, stock, status, thumbnails
+    };
 
-    productos.push(nuevoProducto)
-    saveProducts(productos)
+    productos.push(nuevoProducto);
+    saveProducts(productos);
 
     res.setHeader('Content-Type', 'application/json');
-    return res.status(201).json({ nuevoProducto })
-})
+    return res.status(201).json({ nuevoProducto });
+});
 
 
 // UPDATE
 
-router.put('/:id', (req, res) => {
+routerP.put('/:id', (req, res) => {
 
     let { id } = req.params
     id = parseInt(id)
@@ -124,7 +125,7 @@ router.put('/:id', (req, res) => {
 
 // DELETE 
 
-router.delete('/:id', (req, res) => {
+routerP.delete('/:id', (req, res) => {
 
     let { id } = req.params
     id = parseInt(id)
@@ -153,4 +154,4 @@ router.delete('/:id', (req, res) => {
 
 
 
-module.exports = router
+module.exports = routerP

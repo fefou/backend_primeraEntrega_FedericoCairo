@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 8080
 const productosRouter = require('./routes/productosRouter.js')
+const carritoRouter = require('./routes/carritoRouter.js')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -12,6 +13,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/productos', productosRouter)
+app.use('/api/carts', carritoRouter)
 
 app.listen(port, () => {
     console.log(`Server funcionando con Express en el puerto ${port}`);
